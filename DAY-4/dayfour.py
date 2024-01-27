@@ -15,4 +15,4 @@ for line in f:
     count = len(common)
     if count > 0:
         su += 2**(count-1)
-print(su)
+print("Sum is:",su)
