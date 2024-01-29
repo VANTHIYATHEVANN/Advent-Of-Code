@@ -1,56 +1,55 @@
-f=open('inputfile.txt')
-gears=[]
-for line in f:
-    temp=[]
-    for char in line:
-        temp.append(char)
-    gears.append(temp)
-rows_no=len(gears)
-cols_no=len(gears[0])
-#print(rows_no,' ',cols_no)
-su=0
-coll={}
-row_adj=[-1,0,1]
-col_adj=[-1,0,1]
-for row in range(len(gears)):
-    gear=set()
-    curr=0
-    flag=False
-    ne=False
-    for col in range(len(gears[row])):
-        if col<cols_no and gears[row][col].isdigit():
-            curr=curr*10+int(gears[row][col])
-            for ra in row_adj:
-                for ca in col_adj:
-                    if 0<=row+ra<rows_no and 0<=col+ca<cols_no:
-                        char=gears[row+ra][col+ca]
-                        if not char.isdigit() and char!='.':
-                            flag=True
-                        if char=='*':
-                            gear.add((row+ra, col+ca))
-        elif curr>0:
-            #ne=False
-            if ne:
-                curr*=-1
-            for val in gear:
-                if val not in coll:
-                    coll[val] = []
-                coll[val].append(curr)
-            if flag:
-                su+=curr
-            curr=0 
-            flag=False
-            ne=False
-            gear=set()
-        else:
-            ne=False
-        if col<cols_no and gears[row][col]=='-':
-            ne=True
-print("Part 1",su)
-s=0 
-for key in coll.keys():
-    if len(coll[key])==2:
-        s+=key[0]*key[1]
-print("Part 2",s)
-            
-            
+lines = open('inputfile.txt').read().splitlines()
+cs = set()
+for r in range(len(lines)):
+    for c in range(len(lines[r])):
+        if lines[r][c].isdigit() or lines[r][c]=='.':
+            continue
+        for cr in range(r-1,r+2):
+            for cd in range(c-1,c+2):
+                if cr < 0 or cr >= len(lines) or cd < 0 or cd >= len(lines[cr]) or not lines[cr][cd].isdigit():
+                    continue
+                while cd > 0 and lines[cr][cd - 1].isdigit():
+                    cd -= 1
+                cs.add((cr, cd))
+ns = []
+for r, c in cs:
+    s = ""
+    while c < len(lines[r]) and lines[r][c].isdigit():
+        s += lines[r][c]
+        c += 1
+    ns.append(int(s))
+tot1=0
+for val in ns:
+    tot1+=val
+print("Part 1:",tot1)
+tot2=0
+for r in range(len(lines)):
+    for c in range(len(lines[r])):
+        if lines[r][c] != "*":
+            continue
+
+        cs = set()
+        
+        for cr in [r - 1, r, r + 1]:
+            for cc in [c - 1, c, c + 1]:
+                if cr < 0 or cr >= len(lines) or cc < 0 or cc >= len(lines[cr]) or not lines[cr][cc].isdigit():
+                    continue
+                while cc > 0 and lines[cr][cc - 1].isdigit():
+                    cc -= 1
+                cs.add((cr, cc))
+                
+        if len(cs) != 2:
+            continue
+
+        ns = []
+
+        for cr, cc in cs:
+            s = ""
+            while cc < len(lines[cr]) and lines[cr][cc].isdigit():
+                s += lines[cr][cc]
+                cc += 1
+            ns.append(int(s))
+        
+        tot2 += ns[0] * ns[1]
+
+print("Part 2:",tot2)
