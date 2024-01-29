@@ -1,24 +1,36 @@
 f=open('inputfile.txt')
-games = {}
+soi=0
+sop=0
+mav={'red':12,'green':13,'blue':14}
 for line in f:
-    gp, sp = line.split(": ")
-    gid = int(gp.split(" ")[1])
-    data=[]        
-    for val in sp.split('; '):
-        dic={}
-        for color in val.split(', '):
-            dic[color.split(' ')[1]]=int(color.split(' ')[0])
-        data.append(dic)
-    games[gid] = data
-max_red, max_green, max_blue = 12, 13, 14
-su=0
-for id in games.keys():
-    flag=True
-    for rd in games[id]:
-        if ((rd.get('red')!=None and rd.get('red')>max_red) 
-        or (rd.get('blue')!=None and rd.get('blue')>max_blue) 
-        or (rd.get('green')!=None and rd.get('green')>max_green)):
-            flag=False
+    flag = True
+    line = line.split(':')
+    idd=line[0]
+    line=line[1]
+    dic = {}
+    for cube in line.split(';'):
+        for b in cube.split(','):
+            b = b.split()
+            n=b[0]
+            c=b[1]
+            n = int(n)
+            if c not in dic:
+                dic[c]=0
+            dic[c] = max(dic[c], n)
+            if int(n) > {'red': 12, 'green': 13, 'blue': 14}.get(c, 0):
+                flag = False
+            if c not in mav:
+                c=0
+            else:
+                va=mav[c]
+                if int(n)>va:
+                    flag=False
+                
+    count = 1
+    for val in dic.values():
+        count *= val
+    sop += count
     if flag:
-        su+=int(id)
-print("Sum is:", su)
+        soi += int(idd.split()[-1])
+print("Part 1:",soi)
+print("Part 2:",sop)
