@@ -2,7 +2,9 @@ f=open('inputfile.txt')
 i=0
 time=[]
 distance=[]
+lines=[]
 for line in f:
+    lines.append(line)
     if i==0:
         temp=line.split(':')[1].split()
         for i in range(len(temp)):
@@ -30,4 +32,19 @@ for i in range(len(time)):
         last = int((time[i] / 2) + (time[i] / 2 - first))
         temp=last-first+1 
     ans*=temp
-print("Answer is:",ans)
+print("Part 1:",ans)
+time = ""
+for part in lines[0].split()[1:]:
+    if part.isdigit():
+        time += part
+t = int(time)
+distance = ""
+for part in lines[1].split()[1:]:
+    if part.isdigit():
+        distance += part
+d = int(distance)
+count = 0
+for i in range(t):
+    if (t - i) * i > d:
+        count += 1
+print('Part 2:',count)
