@@ -23,7 +23,7 @@ for line in f:
             dic[i+j+1]=0
         dic[i+j+1]+=dic[i]
     i+=1
-print("Sum is:",su)
+print("Part 1:",su)
 s=0
 for key in dic.keys():
     s+=dic[key]
