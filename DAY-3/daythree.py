@@ -7,8 +7,8 @@ for line in f:
     gears.append(temp)
 rows_no=len(gears)
 cols_no=len(gears[0])
-print(rows_no,' ',cols_no)
-p1=0
+#print(rows_no,' ',cols_no)
+su=0
 coll={}
 row_adj=[-1,0,1]
 col_adj=[-1,0,1]
@@ -16,7 +16,8 @@ for row in range(len(gears)):
     gear=set()
     curr=0
     flag=False
-    for col in range(len(gears[row])+1):
+    ne=False
+    for col in range(len(gears[row])):
         if col<cols_no and gears[row][col].isdigit():
             curr=curr*10+int(gears[row][col])
             for ra in row_adj:
@@ -28,20 +29,28 @@ for row in range(len(gears)):
                         if char=='*':
                             gear.add((row+ra, col+ca))
         elif curr>0:
+            #ne=False
+            if ne:
+                curr*=-1
             for val in gear:
                 if val not in coll:
                     coll[val] = []
                 coll[val].append(curr)
             if flag:
-                p1+=curr
+                su+=curr
             curr=0 
             flag=False
+            ne=False
             gear=set()
-print(p1)
-p2=0 
+        else:
+            ne=False
+        if col<cols_no and gears[row][col]=='-':
+            ne=True
+print("Part 1",su)
+s=0 
 for key in coll.keys():
     if len(coll[key])==2:
-        p2+=key[0]*key[1]
-print(p2)
+        s+=key[0]*key[1]
+print("Part 2",s)
             
             
